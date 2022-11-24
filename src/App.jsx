@@ -1,8 +1,16 @@
 import { useState } from "react";
-import { useEffect } from "react";
 import { nanoid } from "nanoid";
-import WeatherCard from "./WeatherCard";
-import SearchResult from "./SearchResult";
+import { iconUrlFromCode } from "./helperFunctions";
+import WeatherCard from "./components/WeatherCard";
+import SearchResult from "./components/SearchResult";
+import SearchBox from "./components/SearchBox";
+import {
+  TbMapPin,
+  TbWorldLatitude,
+  TbWorldLongitude,
+  TbWind,
+} from "react-icons/tb";
+import { WiHumidity } from "react-icons/wi";
 
 function App() {
   const API_KEY = import.meta.env.VITE_API_KEY; //stored in environment variable
@@ -77,6 +85,7 @@ function App() {
     setShowSearchResults(false);
   }
 
+  //Creates SearchResult component for every object in searchResults state
   const locationResults = searchResults.map((result) => {
     return (
       <SearchResult
@@ -87,11 +96,15 @@ function App() {
     );
   });
 
+  //Creates WeatherCard component for every object in the daily field of data
   const weatherCards =
     data.daily !== undefined
       ? data.daily.map((item) => {
           return (
-            <div key={item.dt} className="w-max flex-shrink-0">
+            <div
+              key={item.dt}
+              className="h-full flex-grow basis-1/3 xl:basis-1/5"
+            >
               <WeatherCard apiData={item} />
             </div>
           );
@@ -101,86 +114,104 @@ function App() {
   return (
     <div
       id="app"
-      className="bg-white text-black text-center w-screen h-screen p-4"
+      className="bg-blue-200 text-gray-900 text-center w-full h-screen px-4 py-10 overflow-scroll"
     >
-      <form
-        id="search-form"
-        onSubmit={handleSubmit}
-        className="w-4/5 mx-auto my-2 sm:w-2/3 lg:w-1/2"
-      >
-        <label
-          htmlFor="search-location"
-          className="block text-gray-700 text-sm font-bold"
-        >
-          Search City or Zipcode
-        </label>{" "}
-        <div className="flex">
-          <input
-            id="search-location"
-            type="search"
-            placeholder="City/zipcode, Country Code"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            onChange={(e) => setFormData(e.target.value)}
-            value={formData}
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Search
-          </button>
-        </div>
-      </form>
+      {" "}
+      <div>
+        <SearchBox
+          formdata={formData}
+          setFormData={setFormData}
+          handleSubmit={handleSubmit}
+        />
 
-      {showSearchResults ? (
-        <>
-          {searchResults.length === 0 ? (
-            <>
-              <div></div>
-            </>
-          ) : (
-            <>
-              {" "}
-              <div className="text-left w-max mx-auto">Search Results:</div>
-              <div className="w-11/12 mx-auto">{locationResults}</div>
-            </>
-          )}
-        </>
-      ) : (
-        <>
-          {data.current !== undefined && data !== null && (
-            <div className="bg-gray-200 flex flex-row justify-around items-center my-1 p-2 rounded">
-              <h1 className="flex-1">
-                {location.name}
-                {location.state ? ", " + location.state : ""}
-                {location.zip ? ", " + location.zip : ""}
-              </h1>
-              <h3 className="flex-1">{location.country}</h3>
-              <div className="coords flex-1 flex flex-col items-start">
-                <h3 className="flex-1">lat: {location.lat}</h3>
-                <h3 className="flex-1">lon: {location.lon}</h3>
-              </div>
-            </div>
-          )}
-          {data.current !== undefined && data !== null && (
-            <div id="weather-current" className="">
-              <h1>Current Weather</h1>
-              <h3 id="description">{`${data.current.weather[0].description}`}</h3>
-              <h3 id="cur-temp">{`Current Temperature: ${data.current.temp}°C`}</h3>
-              <h3 id="wind-speed">{`Wind Speed: ${data.current.wind_speed}m/s`}</h3>
-              <h3 id="Humidity">{`Humidity: ${data.current.humidity}%`}</h3>
-            </div>
-          )}
-          {data && (
-            <div className="flex overflow-x-scroll gap-x-1 pb-4">
-              {weatherCards}
-            </div>
-          )}{" "}
-          {/* <pre className="text-left w-min mx-auto">
+        {showSearchResults ? (
+          <>
+            {searchResults.length === 0 ? (
+              <>
+                <div></div>
+              </>
+            ) : (
+              <>
+                {" "}
+                <div className="text-left w-max mx-auto">Search Results:</div>
+                <div className="w-11/12 mx-auto lg:w-1/2">
+                  {locationResults}
+                </div>
+              </>
+            )}
+          </>
+        ) : (
+          <>
+            <div>
+              {data.current !== undefined && data !== null && (
+                <div className="flex flex-row justify-between items-center w-full mx-auto my-1 p-2 rounded md:w-3/4 lg:w-1/2">
+                  <div className="flex flex-row">
+                    <TbMapPin size="24" />
+                    <h1 className="flex-1">
+                      {location.name}
+                      {location.state ? ", " + location.state : ""}
+                      {location.zip ? ", " + location.zip : ""}
+                      {", " + location.country}
+                    </h1>
+                  </div>
+                  <div className="coords flex flex-col items-start">
+                    <div className="flex flex-row items-center">
+                      <TbWorldLatitude size="20" />
+                      <h3 className="flex-1">lat: {location.lat}</h3>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <TbWorldLongitude size="20" />
+                      <h3 className="flex-1">lon: {location.lon}</h3>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {data.current !== undefined && data !== null && (
+                <div
+                  id="weather-current"
+                  className="flex flex-col items-center my-10"
+                >
+                  <h1
+                    id="cur-temp"
+                    className="text-7xl"
+                  >{`${data.current.temp}°C`}</h1>
+                  <div className="flex flex-row items-center">
+                    <h3
+                      id="description"
+                      className="text-2xl"
+                    >{`${data.current.weather[0].description}`}</h3>
+                    <img
+                      src={iconUrlFromCode(data.current.weather[0].icon)}
+                      alt=""
+                      className="w-30"
+                    />
+                  </div>
+                  <div className="flex flex-row items-center justify-around w-1/2">
+                    <div className="flex flex-row items-center">
+                      <TbWind size="20" />
+                      <h3 id="wind-speed">{`Wind Speed: ${data.current.wind_speed}m/s`}</h3>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <WiHumidity size="28" />
+                      <h3 id="Humidity">{`Humidity: ${data.current.humidity}%`}</h3>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <h1 className="mt-20 mb-4 text-xl">Weekly Forecast</h1>
+              {data && (
+                <div className="w-full mx-auto px-3 flex flex-col gap-5 md:flex-row md:flex-wrap">
+                  {weatherCards}
+                </div>
+              )}{" "}
+              {/* <pre className="text-left w-min mx-auto">
             Data: {JSON.stringify(data, null, "\t")}
           </pre> */}
-        </>
-      )}
+            </div>
+          </>
+        )}
+        <h3 className="mt-6 text-md">Created by Josh Allen</h3>
+      </div>
     </div>
   );
 }
