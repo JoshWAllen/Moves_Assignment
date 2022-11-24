@@ -210,7 +210,6 @@ function App() {
             </div>
           </>
         )}
-        <h3 className="mt-6 text-md">Created by Josh Allen</h3>
       </div>
     </div>
   );
