@@ -1,7 +1,7 @@
 function SearchResult({ location, handleClick }) {
   return (
     <div
-      className="bg-blue-300 flex flex-row justify-around items-center my-1 p-2 rounded hover:bg-blue-400 hover:cursor-pointer"
+      className="bg-blue-400 flex flex-row justify-around items-center my-1 p-2 rounded hover:bg-blue-500 hover:cursor-pointer"
       onClick={() => handleClick(location)}
     >
       <h1 className="flex-1">

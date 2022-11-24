@@ -42,7 +42,7 @@ function App() {
     )
       .then((resp) => resp.json())
       .then((data) => {
-        console.log("City Name Results: ", data);
+        // console.log("City Name Results: ", data);
         if (data != null && !data.cod) setSearchResults(data);
         return fetch(
           `http://api.openweathermap.org/geo/1.0/zip?zip=${formData}&appid=${API_KEY}`
@@ -50,7 +50,7 @@ function App() {
       })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log("Zipcode results: ", data);
+        // console.log("Zipcode results: ", data);
         if (data != null && !data.cod)
           setSearchResults((prevData) => [...prevData, data]);
       })
