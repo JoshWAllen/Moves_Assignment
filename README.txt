@@ -1,10 +1,13 @@
 Notes for the assignment
 
-
 Todo List:
 
 -Add API key to environment variable so that it is not exposed to the public.
--Make search by city or zipcode work
+-Make request and console log to see the json response
+-Show current weather
+-Show daily forecast - list of card components
+-Make search by city and zipcode work
+-Style with some icons
 
 
 Design Decisions:
@@ -14,16 +17,21 @@ event handler. Should probably have submit button so API is not spammed and only
 when the user is done typing their desired location. 
 Update- this was changed to only make an api request when user clicks the submit button
 
-The api does not have explicit temp min and max. Might need to manually loop through 
-the hourly temps and find lowest.
+Update: realized I was using the wrong API so I will refactor the code to work for that
 
-The 16 day daily forecast needs a premium api subscription, but the 5day forcast is free so I will 
-use that instead.
+Used geocoding api to convert city name and zipcode into longitude and latitude to be used in
+the actual weather api request. This was because the weather api depracated the automatic
+geocoding feature.
 
-Since the 5 day forecast is a list of objects all with the same fields,
-it makes sense to create a component for each element in the list, essentially
-a weather card component to display the predicted weather at all the times.
-To make the component easiest to use, I will pass an object as props so the card doesn't take
-in a prop for each desired field, which would get lengthy. 
+When the user types into the search box and clicks search, the geocoding api will be
+fetched to get a list of possible locations. Each location will have a clickable div 
+with info such as city name, country, and coordinates so the user can choose their 
+actual location. When one of the divs is clicked, the location state will be updated
+and triggers the weather api fetch. 
 
-Want to divide 5 day forecast into days. 
+Tools Used:
+
+React 
+Vite - to create react project (instead of create-react-app)
+Tailwind CSS - utility classes that make styling components much faster
+Dotenv package - hide api key in environment variable.

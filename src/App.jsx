@@ -114,7 +114,7 @@ function App() {
   return (
     <div
       id="app"
-      className="bg-blue-200 text-gray-900 text-center w-full h-screen px-4 py-10 overflow-scroll"
+      className="bg-gradient-to-b from-blue-300 to-cyan-300 text-gray-900 text-center w-full h-screen px-4 py-10 overflow-scroll"
     >
       {" "}
       <div>
@@ -186,7 +186,7 @@ function App() {
                       className="w-30"
                     />
                   </div>
-                  <div className="flex flex-row items-center justify-around w-1/2">
+                  <div className="flex flex-row items-center justify-around w-full sm:w-1/2 lg:w-1/3">
                     <div className="flex flex-row items-center">
                       <TbWind size="20" />
                       <h3 id="wind-speed">{`Wind Speed: ${data.current.wind_speed}m/s`}</h3>

@@ -4,7 +4,7 @@ function WeatherCard({ apiData }) {
   return (
     <div
       id="weather-card"
-      className="p-5 h-full flex flex-col items-center bg-blue-300 border border-blue-300 rounded-lg shadow-md transition ease-in-out hover:-translate-y-1 duration-300"
+      className="p-5 h-full flex flex-col items-center bg-gradient-to-tr from-cyan-500 to-blue-400 border border-none rounded-lg shadow-md transition ease-in-out hover:-translate-y-1 duration-300"
     >
       <h1 className="my-2 text-lg">{`${timeConverter(apiData.dt)}`}</h1>
       <img
